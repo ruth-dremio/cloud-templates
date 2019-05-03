@@ -143,11 +143,9 @@
     "computeApiVersion": "2018-06-01",
     "location": "[resourceGroup().location]",
     "nicName": "[concat(parameters('dremioClusterName'), '-nic')]",
+    "imageName": "nsen-dremio-image-latest",
     "dremioImage": {
-      "publisher": "OpenLogic",
-      "offer": "CentOS",
-      "sku": "7.5",
-      "version": "7.5.20180815"
+      "id": "[resourceId('Microsoft.Compute/images', 'imageName')]"
     },
     "linuxConfiguration": {
       "disablePasswordAuthentication": true,
