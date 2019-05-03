@@ -143,11 +143,9 @@
     "computeApiVersion": "2018-06-01",
     "location": "[resourceGroup().location]",
     "nicName": "[concat(parameters('dremioClusterName'), '-nic')]",
+    "imageName": "nsen-dremio-image-latest",
     "dremioImage": {
-      "publisher": "OpenLogic",
-      "offer": "CentOS",
-      "sku": "7.5",
-      "version": "7.5.20180815"
+      "id": "[resourceId(concat('Microsoft.Compute/images', variables('imageName')))]"
     },
     "linuxConfiguration": {
       "disablePasswordAuthentication": true,
@@ -170,7 +168,7 @@
     "upgradeMode": "Manual",
     "namingInfix": "[toLower(substring(concat(parameters('dremioClusterName'), uniqueString(resourceGroup().id)), 0, 9))]",
     "bePoolName": "[concat(variables('namingInfix'), 'bepool')]",
-    "baseURI": "https://raw.githubusercontent.com/Nirmalyasen/cloud-templates/master/dremio/azure/",
+    "baseURI": "https://raw.githubusercontent.com/Nirmalyasen/cloud-templates/withImage/dremio/azure/",
     "scriptFileName": "setupDremio.sh",
     "scriptURL": "[concat(variables('baseURI'), variables('scriptFileName'))]"
   },

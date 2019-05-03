@@ -51,7 +51,7 @@
         }
     },
     "variables": {
-      "baseURI": "https://raw.githubusercontent.com/Nirmalyasen/cloud-templates/master/dremio/azure/",
+      "baseURI": "https://raw.githubusercontent.com/Nirmalyasen/cloud-templates/withImage/dremio/azure/",
       "apiVersion": "2018-05-01",
       "shortName": "[take(resourceGroup().name, 40)]",
       "rgName": "[resourceGroup().name]",
