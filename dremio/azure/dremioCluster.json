@@ -145,7 +145,7 @@
     "nicName": "[concat(parameters('dremioClusterName'), '-nic')]",
     "imageName": "nsen-dremio-image-latest",
     "dremioImage": {
-      "id": "[reference(resourceId('Microsoft.Compute/images', variables('imageName')), variables('computeApiVersion')]"
+      "id": "[reference(resourceId('Microsoft.Compute/images', variables('imageName')), variables('computeApiVersion'))]"
     },
     "linuxConfiguration": {
       "disablePasswordAuthentication": true,
