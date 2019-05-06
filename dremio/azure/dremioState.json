@@ -368,7 +368,7 @@
     },
     "subnetId": {
       "type": "string",
-      "value": "[resourceId(parameters('virtualNetworkResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('virtualNetworkName'), parameters('subnetName'))]"
+      "value": "[if(equals(parameters(virtualNetworkNewOrExisting), 'new'), resourceId(parameters('virtualNetworkResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets/', parameters('virtualNetworkName'), parameters('subnetName')), 'using-existing')]"
     },
     "loadBalancerId": {
       "type": "string",
