@@ -143,6 +143,7 @@
     "computeApiVersion": "2018-06-01",
     "location": "[resourceGroup().location]",
     "nicName": "[concat(parameters('dremioClusterName'), '-nic')]",
+    "osDiskVhdUri": "https://nsentestcentral.blob.core.windows.net/system/Microsoft.Compute/Images/nsen-dremio-image/dremiosw-osDisk.4ee93067-3073-459f-9d41-4fb16a23d134.vhd",
     "imageName": "nsen-dremio-image-latest",
     "dremioImage": {
       "id": "[resourceId('nsen-test', 'Microsoft.Compute/images', variables('imageName'))]"
@@ -173,6 +174,22 @@
     "scriptURL": "[concat(variables('baseURI'), variables('scriptFileName'))]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Compute/images",
+      "apiVersion": "[variables('computeApiVersion')]",
+      "name": "[variables('imageName')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "storageProfile": {
+          "osDisk": {
+            "osType": "Linux",
+            "osState": "Generalized",
+            "blobUri": "[variables('osDiskVhdUri')]",
+            "storageAccountType": "Standard_LRS"
+          }
+        }
+      }
+    },
     {
       "condition": "[equals(parameters('publicIpNewOrExisting'), 'new')]",
       "type": "Microsoft.Network/publicIPAddresses",
@@ -226,7 +243,8 @@
       "name": "[concat(parameters('dremioClusterName'), '-master')]",
       "location": "[variables('location')]",
       "dependsOn": [
-        "[variables('nicName')]"
+        "[variables('nicName')]",
+        "[variables('imageName')]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -294,7 +312,8 @@
         "type": "Microsoft.Compute/virtualMachineScaleSets",
         "apiVersion": "[variables('computeApiVersion')]",
         "location": "[variables('location')]",
-        "dependsOn": ["[concat(parameters('dremioClusterName'), '-master')]"],
+        "dependsOn": ["[concat(parameters('dremioClusterName'), '-master')]",
+            "[variables('imageName')]"],
         "sku": {
             "name": "[parameters('coordinatorVmSize')]",
             "tier": "Standard",
@@ -374,7 +393,8 @@
         "type": "Microsoft.Compute/virtualMachineScaleSets",
         "apiVersion": "[variables('computeApiVersion')]",
         "location": "[variables('location')]",
-        "dependsOn": ["[concat(parameters('dremioClusterName'), '-master')]"],
+        "dependsOn": ["[concat(parameters('dremioClusterName'), '-master')]",
+            "[variables('imageName')]"],
         "sku": {
             "name": "[parameters('executorVmSize')]",
             "tier": "Standard",
