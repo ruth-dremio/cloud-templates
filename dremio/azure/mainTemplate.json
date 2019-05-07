@@ -48,6 +48,13 @@
           "metadata": {
             "description": "Optional - if empty, the latest Dremio CE binaries are used. Must be http or https URL."
           }
+        },
+        "existingSubnet": {
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+            "description": "Optional - resource id of existing subnet to deploy to; if empty, a new vnet and subnet will be created"
+          }
         }
     },
     "variables": {
@@ -99,7 +106,8 @@
                 "parameters": {
                    "dremioClusterName": {"value": "[parameters('clusterName')]"},
                    "dataDiskName": {"value": "[variables('dataDiskName')]"},
-                   "dataDiskSize": {"value": "[variables('clusterSizes')[parameters('clusterSize')].metadataDiskSize]"}
+                   "dataDiskSize": {"value": "[variables('clusterSizes')[parameters('clusterSize')].metadataDiskSize]"},
+                   "virtualNetworkNewOrExisting": {"value": "[if(equals(trim(parameters('existingSubnet')), ''), 'new', 'existing')]"}
                  }
             }
         },
@@ -127,7 +135,7 @@
                    "dataDiskId": {"value": "[reference(concat(variables('shortName'), '-state-deployment')).outputs.dataDiskId.value]"},
                    "sshUsername": {"value": "[parameters('sshUsername')]"},
                    "sshPasswordOrKey": {"value": "[parameters('sshPasswordOrKey')]"},
-                   "subnetId": {"value": "[reference(concat(variables('shortName'), '-state-deployment')).outputs.subnetId.value]"},
+                   "subnetId": {"value": "[if(equals(trim(parameters('existingSubnet')), ''), reference(concat(variables('shortName'), '-state-deployment')).outputs.subnetId.value, parameters('existingSubnet'))]"},
                    "loadBalancerId": {"value": "[reference(concat(variables('shortName'), '-state-deployment')).outputs.loadBalancerId.value]"},
                    "nsgId": {"value": "[reference(concat(variables('shortName'), '-state-deployment')).outputs.nsgId.value]"}
                  }
